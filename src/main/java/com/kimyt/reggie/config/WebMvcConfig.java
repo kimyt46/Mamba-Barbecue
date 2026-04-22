@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 用户端静态资源映射
         registry.addResourceHandler("/front/**")
                 .addResourceLocations("classpath:/front/");
-        // 【关键】恢复Spring Boot默认静态资源映射，避免其他资源404
+        // 【关键】恢复Spring Boot默认静态资源映射，避免其他资源4041
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/", "classpath:/resources/", "classpath:/META-INF/resources/");
 
