@@ -1,8 +1,8 @@
-\# 曼巴烧烤 Mamba-Barbecue 项目本地运行指南
+# 曼巴烧烤 Mamba-Barbecue 项目本地运行指南
 
 本项目为SpringBoot实战后台管理系统，本文档为\*\*本地一键启动完整教程\*\*
 
-\## 一、项目环境要求
+## 一、项目环境要求
 
 | 软件 | 版本要求 | 说明 |
 
@@ -18,9 +18,9 @@
 
 \---
 
-\## 二、本地运行详细步骤
+## 二、本地运行详细步骤
 
-\### 步骤1：IDEA中打开项目
+### 步骤1：IDEA中打开项目
 
 1\. 打开 `IntelliJ IDEA` 
 
@@ -30,7 +30,7 @@
 
 4\. 等待项目源码目录自动识别（java源码目录蓝色、resources资源目录黄色）
 
-\### 步骤2：安装配置`MySQL`数据库，`DataGrip`并导入`.SQL`文件
+### 步骤2：安装配置`MySQL`数据库，`DataGrip`并导入`.SQL`文件
 
 > MYSQL配置教程：https://blog.csdn.net/m0_67703159/article/details/139874886
 
@@ -40,7 +40,7 @@
 
 3. 修改项目配置文件 `application.yml` 中数据库连接信息（数据库名、用户名、密码），匹配本地MySQL配置
 
-\### 步骤3：启动SpringBoot项目并访问前台页面
+### 步骤3：启动SpringBoot项目并访问前台页面
 
 1\. 在项目中找到启动类 `ReggieApplication.java`（含main主方法）
 
