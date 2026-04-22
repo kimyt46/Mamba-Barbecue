@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
+        <title>KT猫后台系统</title>
+        <link rel="icon" href="./../images/favico.ico">
+        <!--涓嶅悓灞忓箷灏哄鏍瑰瓧浣撹缃?->
+        <script src="./../js/base.js"></script>
+        <!--element-ui鐨勬牱寮?->
+        <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
+        <!--寮曞叆vant鏍峰紡-->
+        <link rel="stylesheet" href="../styles/vant.min.css"/>
+        <!-- 寮曞叆鏍峰紡  -->
+        <link rel="stylesheet" href="../styles/index.css" />
+        <!--鏈〉闈㈠唴瀹圭殑鏍峰紡-->
+        <link rel="stylesheet" href="./../styles/address.css" />
+    </head>
+    <body>
+        <div id="address" class="app">
+            <div class="divHead">
+                <div class="divTitle">
+                    <i class="el-icon-arrow-left" @click="goBack"></i>鍦板潃绠＄悊
+                </div>
+            </div>
+            <div class="divContent">
+                <div class="divItem" v-for="(item,index) in addressList" :key="index" @click.capture="itemClick(item)">
+                    <div class="divAddress">
+                        <span :class="{spanCompany:item.label === '鍏徃',spanHome:item.label === '瀹?,spanSchool:item.label === '瀛︽牎'}">{{item.label}}</span>
+                        {{item.detail}}
+                    </div>
+                    <div class="divUserPhone">
+                        <span>{{item.consignee}}</span>
+                        <span>{{item.sex === '0' ? '濂冲＋' : '鍏堢敓'}}</span>
+                        <span>{{item.phone}}</span>
+                    </div>
+                    <img src="./../images/edit.png" @click.stop.prevent="toAddressEditPage(item)"/>
+                    <div class="divSplit"></div>
+                    <div class="divDefault" >
+                        <img src="./../images/checked_true.png" v-if="item.isDefault === 1">
+                        <img src="./../images/checked_false.png" @click.stop.prevent="setDefaultAddress(item)" v-else>璁句负榛樿鍦板潃
+                    </div>
+                </div>
+            </div>
+            <div class="divBottom" @click="toAddressCreatePage">+ 娣诲姞鏀惰揣鍦板潃</div>
+        </div>
+            <!-- 寮€鍙戠幆澧冪増鏈?鍖呭惈浜嗘湁甯姪鐨勫懡浠よ璀﹀憡 -->
+            <script src="../../backend/plugins/vue/vue.js"></script>
+            <!-- 寮曞叆缁勪欢搴?-->
+            <script src="../../backend/plugins/element-ui/index.js"></script>
+            <!-- 寮曞叆vant鏍峰紡 -->
+            <script src="./../js/vant.min.js"></script>   
+            <script src="./../api/address.js"></script>
+            <!-- 寮曞叆axios -->
+            <script src="../../backend/plugins/axios/axios.min.js"></script>
+            <script src="./../js/request.js"></script>
+            <script>
+            new Vue({
+                el:"#address",
+                data(){
+                    return {
+                        addressList:[
+                        //     {
+                        //     label:'鍏徃',
+                        //     detail:'閲戠嚂榫欏啓瀛楁ゼ 4灞傜數姊彛fsdfdsfsdfsdfsssssssssssss锛堢數姊彲鈥︼級',
+                        //     consignee:'鍛ㄥ厛鐢?,//濮撳悕
+                        //     phone:18544445566,//鎵嬫満鍙?
+                        //     isDefault:0,//鏄惁鏄粯璁?
+                        // },
+                        // {
+                        //     label:'瀹?,
+                        //     detail:'閲戠嚂榫欏啓瀛楁ゼ 4灞傜數姊彛锛堢數姊彲鈥︼級',
+                        //     consignee:'鍛ㄥ厛鐢?,//濮撳悕
+                        //     phone:18544445566,//鎵嬫満鍙?
+                        //     isDefault:0,//鏄惁鏄粯璁?
+                        // },
+                        // {
+                        //     label:'瀛︽牎',
+                        //     detail:'閲戠嚂榫欏啓瀛楁ゼ 4灞傜數姊彛锛堢數姊彲鈥︼級',
+                        //     consignee:'鍛ㄥ厛鐢?,//濮撳悕
+                        //     phone:18544445566,//鎵嬫満鍙?
+                        //     isDefault:0,//鏄惁鏄粯璁?
+                        // },
+                        // {
+                        //     label:'鍏徃',
+                        //     detail:'閲戠嚂榫欏啓瀛楁ゼ 4灞傜數姊彛锛堢數姊彲鈥︼級',
+                        //     consignee:'鍛ㄥ厛鐢?,//濮撳悕
+                        //     phone:18544445566,//鎵嬫満鍙?
+                        //     isDefault:0,//鏄惁鏄粯璁?
+                        // },
+                        // {
+                        //     label:'鍏徃',
+                        //     detail:'閲戠嚂榫欏啓瀛楁ゼ 4灞傜數姊彛锛堢數姊彲鈥︼級',
+                        //     consignee:'鍛ㄥ厛鐢?,//濮撳悕
+                        //     phone:18544445566,//鎵嬫満鍙?
+                        //     isDefault:0,//鏄惁鏄粯璁?
+                        // },
+                        // {
+                        //     label:'鍏徃',
+                        //     detail:'閲戠嚂榫欏啓瀛楁ゼ 4灞傜數姊彛锛堢數姊彲鈥︼級',
+                        //     consignee:'鍛ㄥ厛鐢?,//濮撳悕
+                        //     phone:18544445566,//鎵嬫満鍙?
+                        //     isDefault:1,//鏄惁鏄粯璁?
+                        // }
+                    ],
+                    }
+                },
+                computed:{},
+                created(){
+                    this.initData()
+                },
+                mounted(){},
+                methods:{
+                    goBack(){
+                        history.go(-1)
+                    },
+                    toAddressEditPage(item){
+                        window.requestAnimationFrame(()=>{
+                            window.location.href= `/front/page/address-edit.html?id=${item.id}`
+                        })
+                    },
+                    toAddressCreatePage(){
+                        window.requestAnimationFrame(()=>{
+                            window.location.href= '/front/page/address-edit.html'
+                        })
+                    },
+                    async initData(){
+                        const res = await addressListApi()
+                        if(res.code === 1){
+                            this.addressList = res.data
+                        }else{
+                            this.$message.error(res.msg)
+                        }
+                    },
+                    async setDefaultAddress(item){
+                        if(item.id){
+                            const res = await setDefaultAddressApi({id:item.id})
+                            if(res.code === 1){
+                            this.initData()
+                            }else{
+                                this.$message.error(res.msg)
+                            }
+                        }
+                    },
+                    itemClick(item){
+                        const url = document.referrer
+                        //琛ㄧず鏄粠璁㈠崟椤甸潰璺宠浆杩囨潵鐨?
+                        if(url.includes('order')){
+                            this.setDefaultAddress(item)
+                            history.go(-1)
+                        }
+                    }
+
+                }
+            })
+            </script>
+    </body>
+</html>
+

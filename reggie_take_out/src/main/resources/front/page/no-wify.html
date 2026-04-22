@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
+        <title>KT猫后台系统</title>
+        <link rel="icon" href="./../images/favico.ico">
+        <!--涓嶅悓灞忓箷灏哄鏍瑰瓧浣撹缃?->
+        <script src="./../js/base.js"></script>
+        <!--element-ui鐨勬牱寮?->
+        <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
+        <!-- 寮曞叆鏍峰紡  -->
+        <link rel="stylesheet" href="../styles/index.css" />
+        <!--鏈〉闈㈠唴瀹圭殑鏍峰紡-->
+        <link rel="stylesheet" href="./../styles/no-wify.css" />
+    </head>
+    <body>
+        <div id="no_wifi" class="app">
+            <div class="divHead">
+                <div class="divTitle">
+                    <i class="el-icon-arrow-left" @click="goBack"></i>KT鐚悗鍙扮郴缁?
+                </div>
+            </div>
+            <div class="divContent">
+                <img src="./../images//no_wifi.png"/>
+                <div class="divDesc">缃戠粶杩炴帴寮傚父</div>
+                <div class="btnRefresh" @click="toPagePrev">鐐瑰嚮鍒锋柊</div>
+            </div>
+        </div>
+            <!-- 寮€鍙戠幆澧冪増鏈紝鍖呭惈浜嗘湁甯姪鐨勫懡浠よ璀﹀憡 -->
+            <script src="../../backend/plugins/vue/vue.js"></script>
+            <!-- 寮曞叆缁勪欢搴?-->
+            <script src="../../backend/plugins/element-ui/index.js"></script>
+            <!-- 寮曞叆axios -->
+            <script src="../../backend/plugins/axios/axios.min.js"></script>
+            <script src="./../js/request.js"></script>
+            <script>
+            new Vue({
+                el:"#no_wifi",
+                data(){
+                    return {
+                    }
+                },
+                computed:{},
+                created(){
+
+                },
+                mounted(){},
+                methods:{
+                    goBack(){
+                        history.go(-1)
+                    },
+                    toPagePrev(){
+                        history.go(-1)
+                    }
+                }
+            })
+            </script>
+    </body>
+</html>
+
