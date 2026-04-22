@@ -32,6 +32,8 @@
 
 \### 步骤2：安装配置`MySQL`数据库，`DataGrip`并导入`.SQL`文件
 
+> MYSQL配置教程：https://blog.csdn.net/m0_67703159/article/details/139874886
+
 1. 本地安装并启动 \*\*MySQL\*\* 数据库服务并启动，配置
 
 2. 在`Datagrip`中管理数据库，将项目内置的SQL脚本文件导入MySQL数据库
