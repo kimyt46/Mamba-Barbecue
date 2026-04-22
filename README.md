@@ -22,7 +22,7 @@
 
 \### 步骤1：IDEA中打开项目
 
-1\. 打开 IntelliJ IDEA 
+1\. 打开 `IntelliJ IDEA` 
 
 2\. 点击首页 `Open`，选择项目根目录文件夹 `reggie\_take\_out`
 
@@ -30,11 +30,11 @@
 
 4\. 等待项目源码目录自动识别（java源码目录蓝色、resources资源目录黄色）
 
-\### 步骤2：安装配置MySQL数据库并导入SQL文件
+\### 步骤2：安装配置`MySQL`数据库，`DataGrip`并导入`.SQL`文件
 
-1. 本地安装并启动 \*\*MySQL\*\* 数据库服务
+1. 本地安装并启动 \*\*MySQL\*\* 数据库服务并启动，配置
 
-2. 新建数据库，将项目内置的SQL脚本文件导入MySQL数据库
+2. 在`Datagrip`中管理数据库，将项目内置的SQL脚本文件导入MySQL数据库
 
 3. 修改项目配置文件 `application.yml` 中数据库连接信息（数据库名、用户名、密码），匹配本地MySQL配置
 
