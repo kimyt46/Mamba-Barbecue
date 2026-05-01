@@ -1,20 +1,20 @@
-﻿(function (win) {
+(function (win) {
   axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-  // 鍒涘缓axios瀹炰緥
+  // 创建axios实例
   const service = axios.create({
-    // axios涓姹傞厤缃湁baseURL閫夐」锛岃〃绀鸿姹俇RL鍏叡閮ㄥ垎
+    // axios中请求配置有baseURL选项，表示请求URL公共部分
     baseURL: '/',
-    // 瓒呮椂
+    // 超时
     timeout: 10000
   })
-  // request鎷︽埅鍣?
+  // request拦截器
   service.interceptors.request.use(config => {
-    // 鏄惁闇€瑕佽缃?token
+    // 是否需要设置 token
     // const isToken = (config.headers || {}).isToken === false
     // if (getToken() && !isToken) {
-    //   config.headers['Authorization'] = 'Bearer ' + getToken() // 璁╂瘡涓姹傛惡甯﹁嚜瀹氫箟token 璇锋牴鎹疄闄呮儏鍐佃嚜琛屼慨鏀?
+    //   config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     // }
-    // get璇锋眰鏄犲皠params鍙傛暟
+    // get请求映射params参数
     if (config.method === 'get' && config.params) {
       let url = config.url + '?';
       for (const propName of Object.keys(config.params)) {
@@ -41,24 +41,25 @@
       Promise.reject(error)
   })
 
-  // 鍝嶅簲鎷︽埅鍣?
+  // 响应拦截器
   service.interceptors.response.use(res => {
-      console.log('---鍝嶅簲鎷︽埅鍣?--',res)
-      if (res.data.code === 0 && res.data.msg === 'NOTLOGIN') {// 杩斿洖鐧诲綍椤甸潰
+      console.log('---响应拦截器---',res)
+      if (res.data.code === 0 && res.data.msg === 'NOTLOGIN') {// 返回登录页面
         window.top.location.href = '/front/page/login.html'
+      } else {
+        return res.data
       }
-      return res.data
     },
     error => {
       let { message } = error;
       if (message == "Network Error") {
-        message = "鍚庣鎺ュ彛杩炴帴寮傚父";
+        message = "后端接口连接异常";
       }
       else if (message.includes("timeout")) {
-        message = "绯荤粺鎺ュ彛璇锋眰瓒呮椂";
+        message = "系统接口请求超时";
       }
       else if (message.includes("Request failed with status code")) {
-        message = "绯荤粺鎺ュ彛" + message.substr(message.length - 3) + "寮傚父";
+        message = "系统接口" + message.substr(message.length - 3) + "异常";
       }
       window.vant.Notify({
         message: message,
@@ -69,7 +70,5 @@
       return Promise.reject(error)
     }
   )
-  win.$axios = service
+  win.$axios = service
 })(window);
-
-

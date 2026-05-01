@@ -1,20 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-        <title>KT猫后台系统</title>
+        <title>菩提阁</title>
         <link rel="icon" href="./../images/favico.ico">
-        <!--涓嶅悓灞忓箷灏哄鏍瑰瓧浣撹缃?->
+        <!--不同屏幕尺寸根字体设置-->
         <script src="./../js/base.js"></script>
-        <!--element-ui鐨勬牱寮?->
+        <!--element-ui的样式-->
         <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
-        <!--寮曞叆vant鏍峰紡-->
+        <!--引入vant样式-->
         <link rel="stylesheet" href="../styles/vant.min.css"/>
-        <!-- 寮曞叆鏍峰紡  -->
+        <!-- 引入样式  -->
         <link rel="stylesheet" href="../styles/index.css" />
-        <!--鏈〉闈㈠唴瀹圭殑鏍峰紡-->
+        <!--本页面内容的样式-->
         <link rel="stylesheet" href="./../styles/address-edit.css" />
     </head>
     <body>
@@ -26,42 +26,42 @@
             </div>
             <div class="divContent">
                 <div class="divItem">
-                   <span>鑱旂郴浜猴細</span> 
-                   <el-input placeholder=" 请填写收货人的姓名" v-model="form.consignee" maxlength='10' class="inputUser"/></el-input>
+                   <span>联系人：</span> 
+                   <el-input placeholder=" 请填写收货人的姓名" v-model="form.consignee"  maxlength='10' class="inputUser"/></el-input>
                    <span class="spanChecked" @click="form.sex = '1'">
                     <i :class="{iActive:form.sex === '1'}"></i>
-                    鍏堢敓
+                    先生
                    </span>
                    <span class="spanChecked" @click="form.sex = '0'">
                     <i :class="{iActive:form.sex === '0'}"></i>
-                    濂冲＋
+                    女士
                 </span>
                 </div>
                 <div class="divItem">
-                    <span>鎵嬫満鍙凤細</span> 
-                    <el-input placeholder=" 璇峰～鍐欐敹璐т汉鎵嬫満鍙风爜" v-model="form.phone"  maxlength='20' style="width: calc(100% - 80rem);"/></el-input>
+                    <span>手机号：</span> 
+                    <el-input placeholder=" 请填写收货人手机号码" v-model="form.phone"  maxlength='20' style="width: calc(100% - 80rem);"/></el-input>
                 </div>
                 <div class="divItem">
-                    <span>鏀惰揣鍦板潃锛</span> 
-                    <el-input placeholder=" 璇疯緭鍏ユ敹璐у湴鍧€" v-model="form.detail"  maxlength='140'/></el-input>
+                    <span>收货地址：</span> 
+                    <el-input placeholder=" 请输入收货地址" v-model="form.detail"  maxlength='140'/></el-input>
                 </div>
                 <div class="divItem ">
-                    <span>鏍囩锛</span> 
+                    <span>标签：</span> 
                     <span v-for="(item,index) in labelList" :key="index" @click="form.label = item;activeIndex = index" :class="{spanItem:true,spanActiveSchool:activeIndex === index}">{{item}}</span>
                 </div>
-                <div class="divSave" @click="saveAddress">淇濆瓨鍦板潃</div>
-                <div class="divDelete" @click="deleteAddress" v-if="id">鍒犻櫎鍦板潃</div>
+                <div class="divSave" @click="saveAddress">保存地址</div>
+                <div class="divDelete" @click="deleteAddress" v-if="id">删除地址</div>
             </div>
         </div>
-        <!-- 寮€鍙戠幆澧冪増鏈?鍖呭惈浜嗘湁甯姪鐨勫懡浠よ璀﹀憡 -->
+        <!-- 开发环境版本,包含了有帮助的命令行警告 -->
         <script src="../../backend/plugins/vue/vue.js"></script>
-        <!-- 寮曞叆缁勪欢搴?-->
+        <!-- 引入组件库 -->
         <script src="../../backend/plugins/element-ui/index.js"></script>
-        <!-- 寮曞叆vant鏍峰紡 -->
+        <!-- 引入vant样式 -->
         <script src="./../js/vant.min.js"></script>       
         <script src="./../js/common.js"></script>
         <script src="./../api/address.js"></script>
-        <!-- 寮曞叆axios -->
+        <!-- 引入axios -->
         <script src="../../backend/plugins/axios/axios.min.js"></script>
         <script src="./../js/request.js"></script>
         <script>
@@ -69,16 +69,16 @@
                 el:"#address_edit",
                 data(){
                     return {
-                        title:'鏂板鏀惰揣鍦板潃',
+                        title:'新增收货地址',
                         form:{
-                            consignee:'',//鑱旂郴浜?
-                            phone:undefined,//鎵嬫満鍙?
-                            sex:'1',//0琛ㄧず濂?1 琛ㄧず鐢?
-                            detail:'',//鏀惰揣鍦板潃
-                            label:'鍏徃',//鏍囩
+                            consignee:'',//联系人
+                            phone:undefined,//手机号
+                            sex:'1',//0表示女 1 表示男
+                            detail:'',//收货地址
+                            label:'公司',//标签
                         },
                         labelList:[
-                            '公司','家','学校'
+                            '无','公司','家','学校'
                         ],
                         id:undefined,
                         activeIndex :0
@@ -98,7 +98,7 @@
                         const params = parseUrl(window.location.search)
                         this.id = params.id
                         if(params.id){
-                            this.title = '缂栬緫鏀惰揣鍦板潃'
+                            this.title = '编辑收货地址'
                             const res = await addressFindOneApi(params.id)
                             if(res.code === 1){
                                 this.form = res.data
@@ -110,20 +110,20 @@
                     async saveAddress(){
                         const form = this.form
                         if(!form.consignee){
-                            this.$notify({ type:'warning', message:'璇疯緭鍏ヨ仈绯讳汉'});
+                            this.$notify({ type:'warning', message:'请输入联系人'});
                             return 
                         }
                         if(!form.phone){
-                            this.$notify({ type:'warning', message:'璇疯緭鍏ユ墜鏈哄彿'});
+                            this.$notify({ type:'warning', message:'请输入手机号'});
                             return 
                         }
                         if(!form.detail){
-                            this.$notify({ type:'warning', message:'璇疯緭鍏ユ敹璐у湴鍧€'});
+                            this.$notify({ type:'warning', message:'请输入收货地址'});
                             return 
                         }
                         const reg = /^1[3|4|5|7|8][0-9]{9}$/
                         if(!reg.test(form.phone)){
-                            this.$notify({ type:'warning', message:'手机号格式不合法'});
+                            this.$notify({ type:'warning', message:'手机号码不合法'});
                             return  
                         }
                         let res= {}
@@ -143,8 +143,8 @@
                     },
                     deleteAddress(){
                         this.$dialog.confirm({
-                            title: '纭鍒犻櫎',
-                            message: '纭瑕佸垹闄ゅ綋鍓嶅湴鍧€鍚楋紵',
+                            title: '确认删除',
+                            message: '确认要删除当前地址吗？',
                         })
                         .then( async () => {
                             const res = await deleteAddressApi({ids:this.id })
@@ -164,6 +164,3 @@
             </script>
     </body>
 </html>
-
-
-

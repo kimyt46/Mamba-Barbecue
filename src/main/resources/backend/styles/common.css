@@ -13387,3 +13387,8 @@ input[type="number"] {
 .el-dialog__footer {
   padding: 0px 30px 30px;
 }
+
+/* Override earlier mojibake text in the upload button */
+.avatar-uploader .el-icon-plus:before {
+  content: "上传图片" !important;
+}

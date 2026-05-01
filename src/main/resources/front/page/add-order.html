@@ -1,27 +1,27 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-        <title>KT猫后台系统</title>
+        <title>菩提阁</title>
         <link rel="icon" href="./../images/favico.ico">
-        <!--涓嶅悓灞忓箷灏哄鏍瑰瓧浣撹缃?->
+        <!--不同屏幕尺寸根字体设置-->
         <script src="./../js/base.js"></script>
-        <!--element-ui鐨勬牱寮?->
+        <!--element-ui的样式-->
         <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
-        <!--寮曞叆vant鏍峰紡-->
+        <!--引入vant样式-->
         <link rel="stylesheet" href="../styles/vant.min.css"/>
-        <!-- 寮曞叆鏍峰紡  -->
+        <!-- 引入样式  -->
         <link rel="stylesheet" href="../styles/index.css" />
-        <!--鏈〉闈㈠唴瀹圭殑鏍峰紡-->
+        <!--本页面内容的样式-->
         <link rel="stylesheet" href="./../styles/add-order.css" />
     </head>
     <body>
         <div id="add_order" class="app">
             <div class="divHead">
                 <div class="divTitle">
-                    <i class="el-icon-arrow-left" @click="goBack"></i>KT鐚悗鍙扮郴缁?
+                    <i class="el-icon-arrow-left" @click="goBack"></i>菩提阁
                 </div>
             </div>
             <div class="divContent">
@@ -29,16 +29,16 @@
                     <div @click="toAddressPage">                    
                         <div class="address">{{address.detail}}</div>
                         <div class="name">
-                            <span>{{address.consignee}}{{address.sex === '1' ? '鍏堢敓':'濂冲＋'}}</span>
+                            <span>{{address.consignee}}{{address.sex === '1' ? '先生':'女士'}}</span>
                             <span>{{address.phone}}</span>
                         </div>
                         <i class="el-icon-arrow-right"></i>
                     </div>
                     <div class="divSplit"></div>
-                    <div class="divFinishTime">棰勮{{finishTime}}閫佽揪</div>
+                    <div class="divFinishTime">预计{{finishTime}}送达</div>
                 </div>
                 <div class="order">
-                    <div class="title">璁㈠崟鏄庣粏</div>
+                    <div class="title">订单明细</div>
                     <div class="divSplit"></div>
                     <div class="itemList">
                         <div class="item" v-for="(item,index) in cartData" :key="index">
@@ -52,21 +52,21 @@
                                 <div class="numPrice">
                                     <span class="num">x{{item.number}}</span>
                                     <div class="price">
-                                        <span class="spanMoney">锟</span>{{item.amount}}</div>
+                                        <span class="spanMoney">￥</span>{{item.amount}}</div>
                                     </div>
                                 </div>
                             </div>
                     </div>
                 </div>
                 <div class="note">
-                    <div class="title">澶囨敞</div>
+                    <div class="title">备注</div>
                     <van-field
                         v-model="note"
                         rows="2"
                         autosize
                         type="textarea"
                         maxlength="50"
-                        placeholder="璇疯緭鍏ユ偍闇€瑕佸娉ㄧ殑淇℃伅"
+                        placeholder="请输入您需要备注的信息"
                         show-word-limit
                     />
                 </div>
@@ -75,21 +75,21 @@
                 <div :class="{imgCartActive: cartData && cartData.length > 0, imgCart:!cartData || cartData.length<1}"></div>
                 <div :class="{divGoodsNum:1===1, moreGoods:cartData && cartData.length > 99}" v-if="cartData && cartData.length > 0">{{ goodsNum }}</div>
                 <div class="divNum">
-                    <span>锟</span>
+                    <span>￥</span>
                     <span>{{goodsPrice}}</span>
                 </div>
                 <div class="divPrice"></div>
-                <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="goToPaySuccess">鍘绘敮浠</div>
+                <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="goToPaySuccess">去支付</div>
               </div>
         </div>
-        <!-- 寮€鍙戠幆澧冪増鏈紝鍖呭惈浜嗘湁甯姪鐨勫懡浠よ璀﹀憡 -->
+        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
         <script src="../../backend/plugins/vue/vue.js"></script>
-        <!-- 寮曞叆缁勪欢搴?-->
+        <!-- 引入组件库 -->
         <script src="../../backend/plugins/element-ui/index.js"></script>
-        <!-- 寮曞叆vant鏍峰紡 -->
+        <!-- 引入vant样式 -->
         <script src="./../js/vant.min.js"></script>      
         <script src="./../api/address.js"></script>
-        <!-- 寮曞叆axios -->
+        <!-- 引入axios -->
         <script src="../../backend/plugins/axios/axios.min.js"></script>
         <script src="./../js/request.js"></script>
         <script src="./../js/common.js"></script>
@@ -101,15 +101,15 @@
                 data(){
                     return {
                         address:{
-                            phone:'',//鎵嬫満鍙?
-                            consignee:'',//濮撳悕
-                            detail:'',//璇︾粏鍦板潃
+                            phone:'',//手机号
+                            consignee:'',//姓名
+                            detail:'',//详细地址
                             sex:'1',
                             id:undefined
                         },
-                        finishTime:'',//閫佽揪鏃堕棿
+                        finishTime:'',//送达时间
                         cartData:[],
-                        note:''//澶囨敞淇℃伅
+                        note:''//备注信息
                     }
                 },
                 computed:{
@@ -141,12 +141,12 @@
                         history.go(-1)
                     },
                     initData(){
-                        //鑾峰彇榛樿鐨勫湴鍧€
+                        //获取默认的地址
                         this.defaultAddress()
-                        //鑾峰彇璐墿杞︾殑鍟嗗搧
+                        //获取购物车的商品
                         this.getCartData()
                     },
-                    //鑾峰彇榛樿鍦板潃
+                    //获取默认地址
                     async defaultAddress(){
                         const res = await  getDefaultAddressApi()
                         if(res.code === 1){
@@ -158,7 +158,7 @@
                             })
                         }
                     },
-                    //鑾峰彇閫佽揪鏃堕棿
+                    //获取送达时间
                     getFinishTime(){
                         let now = new Date()
                         let hour = now.getHours() +1
@@ -176,7 +176,7 @@
                             window.location.href = '/front/page/address.html'
                         })
                     },
-                    //鑾峰彇璐墿杞︽暟鎹?
+                    //获取购物车数据
                     async getCartData(){
                         const res = await cartListApi({})
                         if(res.code === 1){
@@ -200,7 +200,7 @@
                             this.$notify({ type:'warning', message:res.msg});
                         }
                     },
-                    //缃戠粶鍥剧墖璺緞杞崲
+                    //网络图片路径转换
                     imgPathConvert(path){
                         return imgPath(path)
                     },
@@ -209,4 +209,3 @@
             </script>
         </body>
     </html>
-

@@ -231,7 +231,9 @@
                 action="/common/upload"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
-                :on-change="onChange"
+                :on-error="handleAvatarError"
+                :before-upload="beforeUpload"
+                accept=".png,.jpg,.jpeg"
                 ref="upload"
               >
                 <img v-if="imageUrl" :src="imageUrl" class="avatar"></img>
@@ -604,15 +606,21 @@
             // this.imageUrl = response.data
             if(response.code === 0 && response.msg === '未登录'){
               window.top.location.href = '/backend/page/login/login.html'
+            }else if(response.code !== 1){
+              this.$message.error(response.msg || '图片上传失败')
             }else{
               this.imageUrl = `/common/download?name=${response.data}`
               this.ruleForm.image = response.data
             }
           },
 
-          onChange (file) {
+          handleAvatarError (err, file, fileList) {
+            this.$message.error('图片上传失败，请检查后端服务是否正常启动')
+          },
+
+          beforeUpload (file) {
             if(file){
-              const suffix = file.name.split('.')[1]
+              const suffix = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase()
               const size = file.size / 1024 / 1024 < 2
               if(['png','jpeg','jpg'].indexOf(suffix) < 0){
                 this.$message.error('上传图片只支持 png、jpeg、jpg 格式！')
@@ -623,7 +631,7 @@
                 this.$message.error('上传文件大小不能超过 2MB!')
                 return false
               }
-              return file
+              return true
             }
           },
           goBack() {

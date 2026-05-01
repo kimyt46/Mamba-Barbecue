@@ -1,21 +1,21 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- 涓婅堪3涓猰eta鏍囩*蹇呴』*鏀惧湪鏈€鍓嶉潰锛屼换浣曞叾浠栧唴瀹归兘*蹇呴』*璺熼殢鍏跺悗锛?-->
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <title>KT猫后台系统</title>
+    <title>菩提阁</title>
     <link rel="icon" href="images/favico.ico">
-    <!--涓嶅悓灞忓箷灏哄鏍瑰瓧浣撹缃?->
+    <!--不同屏幕尺寸根字体设置-->
     <script src="./js/base.js"></script>
-    <!--element-ui鐨勬牱寮?->
+    <!--element-ui的样式-->
     <link rel="stylesheet" href="../backend/plugins/element-ui/index.css" />
-    <!--寮曞叆vant鏍峰紡-->
+    <!--引入vant样式-->
     <link rel="stylesheet" href="styles/vant.min.css"/>
-    <!-- 寮曞叆鏍峰紡  -->
+    <!-- 引入样式  -->
     <link rel="stylesheet" href="styles/index.css" />
-    <!--鏈〉闈㈠唴瀹圭殑鏍峰紡-->
+    <!--本页面内容的样式-->
     <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body>
@@ -27,7 +27,7 @@
         <div class="divStatic">
           <img src="./images/logo.png"  class="logo"/>
           <div class="divDesc">
-            <div class="divName">KT猫后台系统餐厅</div>
+            <div class="divName">菩提阁餐厅</div>
             <div class="divSend">
                 <span><img src="./images/time.png"/> 距离1.5km</span>
                 <span><img src="./images/money.png"/> 配送费6元</span>
@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="divDesc">
-          简介: KT猫后台系统中餐厅是 KT猫后台系统点餐的独立品牌，定位大众化美食外送餐饮，致力于为顾客打造专业美食。
+          简介: 菩提阁中餐厅是菩提阁点餐的独立的品牌，定位“大众 化的美食外送餐饮”，旨为顾客打造专业美食。
         </div>
       </div>
       <div class="divBody">
@@ -56,7 +56,7 @@
               <div>
                 <div class="divName">{{item.name}}</div>
                 <div class="divDesc">{{item.description}}</div>
-                <div class="divDesc">{{'月售' + (item.saleNum ? item.saleNum : 0)  }}</div>
+                <div class="divDesc">{{'月销' + (item.saleNum ? item.saleNum : 0)  }}</div>
                 <div class="divBottom"><span>￥</span><span>{{item.price/100}}</span></div>
                 <div class="divNum">
                   <div class="divSubtract" v-if="item.number > 0">
@@ -101,8 +101,8 @@
             </div>
           </div>
           <div class="divBottom">
-            <div><span class="spanMoney">锟</span>{{dialogFlavor.price/100}}</div>
-            <div @click="dialogFlavorAddCart">鍔犲叆璐墿杞</div>
+            <div><span class="spanMoney">￥</span>{{dialogFlavor.price/100}}</div>
+            <div @click="dialogFlavorAddCart">加入购物车</div>
           </div>
           <div class="divFlavorClose" @click="dialogFlavor.show = false">
             <img src="./images/close.png"/>
@@ -110,9 +110,9 @@
         </van-dialog>
         <van-popup v-model="cartDialogShow" position="bottom" :style="{ height: '50%' }" class="dialogCart">
           <div class="divCartTitle">
-            <div class="title">璐墿杞</div>
+            <div class="title">购物车</div>
             <div class="clear" @click="clearCart">
-              <i class="el-icon-delete"></i> 娓呯┖
+              <i class="el-icon-delete"></i> 清空
             </div>
           </div>
           <div class="divCartContent">
@@ -125,7 +125,7 @@
               <div class="divDesc">
                 <div class="name">{{item.name}}</div>
                 <div class="price">
-                  <span class="spanMoney">锟</span>{{item.amount}}</div>
+                  <span class="spanMoney">￥</span>{{item.amount}}</div>
               </div>
               <div class="divNum">
                 <div class="divSubtract">
@@ -157,14 +157,14 @@
           </div>
           <div class="divNum">
             <div class="left">
-              <span>锟</span><span>{{detailsDialog.item.price/100}}</span>
+              <span>￥</span><span>{{detailsDialog.item.price/100}}</span>
             </div>
             <div class="right">
                 <div class="divSubtract" v-if="detailsDialog.item.number > 0">
                   <img src="./images/subtract.png" @click="subtractCart(detailsDialog.item)"/>
                 </div>
                 <div class="divDishNum">{{detailsDialog.item.number}}</div>
-                <div class="divTypes" v-if="detailsDialog.item.flavors && detailsDialog.item.flavors.length > 0 && !detailsDialog.item.number " @click ="chooseFlavorClick(detailsDialog.item)">閫夋嫨瑙勬牸</div>
+                <div class="divTypes" v-if="detailsDialog.item.flavors && detailsDialog.item.flavors.length > 0 && !detailsDialog.item.number " @click ="chooseFlavorClick(detailsDialog.item)">选择规格</div>
                 <div class="divAdd" v-else>
                   <img src="./images/add.png" @click="addCart(detailsDialog.item)"/>
                 </div>
@@ -188,9 +188,9 @@
                     <img src="./images/noImg.png"/>
                   </div>
                 </el-image>
-                <div class="divSubTitle">{{item.name + '(' + item.copies + '浠?' }}
+                <div class="divSubTitle">{{item.name + '(' + item.copies + '份)' }}
                   <div class="divPrice">
-                    <span>锟</span><span>{{item.price/100}}</span>
+                    <span>￥</span><span>{{item.price/100}}</span>
                   </div>
                 </div>                
                 <div class="content">{{item.description}}</div>
@@ -198,7 +198,7 @@
             </div>
           <div class="divNum">
               <div class="left">
-                <span>锟</span><span>{{setMealDialog.item.price/100}}</span>
+                <span>￥</span><span>{{setMealDialog.item.price/100}}</span>
               </div>
               <div class="right">
                   <div class="divSubtract" v-if="setMealDialog.item.number > 0">
@@ -208,7 +208,7 @@
                   <div class="divAdd" v-if="setMealDialog.item.number">
                     <img src="./images/add.png" @click="addCart(setMealDialog.item)"/>
                   </div>
-                  <div class="addCart"  @click="addCart(setMealDialog.item)" v-if="!setMealDialog.item.number">鍔犲叆璐墿杞</div>
+                  <div class="addCart"  @click="addCart(setMealDialog.item)" v-if="!setMealDialog.item.number">加入购物车</div>
               </div>
           </div>
           <div class="detailsDialogClose" @click="setMealDialog.show = false">
@@ -216,13 +216,13 @@
           </div>
         </van-dialog>
     </div>
-        <!-- 寮€鍙戠幆澧冪増鏈紝鍖呭惈浜嗘湁甯姪鐨勫懡浠よ璀﹀憡 -->
+        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
         <script src="../backend/plugins/vue/vue.js"></script>
-        <!-- 寮曞叆缁勪欢搴?-->
+        <!-- 引入组件库 -->
         <script src="../backend/plugins/element-ui/index.js"></script>
-        <!-- 寮曞叆vant鏍峰紡 -->
+        <!-- 引入vant样式 -->
         <script src="./js/vant.min.js"></script>        
-        <!-- 寮曞叆axios -->
+        <!-- 引入axios -->
         <script src="../backend/plugins/axios/axios.min.js"></script>
         <script src="./js/request.js"></script>
         <script src="./js/common.js"></script>
@@ -233,7 +233,7 @@
           el:'#main',
           data(){
             return {
-              //宸﹁竟鑿滃搧绫诲埆index
+              //左边菜品类别index
               activeType:0,
               categoryList:[],
               categoryId:undefined,
@@ -293,10 +293,10 @@
             this.initData()
           },
           methods:{
-            //鍒濆鍖栨暟鎹?
+            //初始化数据
             initData(){
               Promise.all([categoryListApi(),cartListApi({})]).then(res=>{
-                //鑾峰彇鍒嗙被鏁版嵁
+                //获取分类数据
                 if(res[0].code === 1){
                   this.categoryList = res[0].data
                   if(Array.isArray(res[0].data) && res[0].data.length > 0){
@@ -310,7 +310,7 @@
                 }else{
                   this.$notify({ type:'warning', message:res[0].msg});
                 }
-                //鑾峰彇鑿滃搧鏁版嵁
+                //获取菜品数据
                 if(res[1].code === 1){
                 this.cartData = res[1].data
                 }else{
@@ -318,17 +318,17 @@
                 }
               })
             },
-            //鍒嗙被鐐瑰嚮
+            //分类点击
             categoryClick(index,id,type){
               this.activeType = index
               this.categoryId = id
-              if(type === 1){//鑿滃搧
+              if(type === 1){//菜品
                 this.getDishList()
               }else{
                 this.getSetmealData()
               }
             },
-            //鑾峰彇鑿滃搧鏁版嵁
+            //获取菜品数据
             async getDishList(){
               if(!this.categoryId){
                 return
@@ -351,7 +351,7 @@
                 this.$notify({ type:'warning', message:res.msg});
               }
             },
-            //鑾峰彇濂楅鏁版嵁setmealId
+            //获取套餐数据setmealId
             async getSetmealData(){
               if(!this.categoryId){
                 return
@@ -374,7 +374,7 @@
                 this.$notify({ type:'warning', message:res.msg});
               }
             },
-            //鑾峰彇璐墿杞︽暟鎹?
+            //获取购物车数据
             async getCartData(){
               const res = await cartListApi({})
               if(res.code === 1){
@@ -383,19 +383,19 @@
                 this.$notify({ type:'warning', message:res.msg});
               }
             },
-            //鑿滃崟涓線璐墿杞︿腑娣诲姞鍟嗗搧
+            //菜单中往购物车中添加商品
             async addCart(item){
               let params = {
-                amount:item.price/100,//閲戦
-                dishFlavor:item.dishFlavor,//鍙ｅ懗  濡傛灉娌℃湁浼爑ndefined
-                dishId:undefined,//鑿滃搧id
-                setmealId:undefined,//濂楅id
+                amount:item.price/100,//金额
+                dishFlavor:item.dishFlavor,//口味  如果没有传undefined
+                dishId:undefined,//菜品id
+                setmealId:undefined,//套餐id
                 name:item.name,
                 image:item.image
               }
-              if(Array.isArray(item.flavors)){//琛ㄧず鏄彍鍝?
+              if(Array.isArray(item.flavors)){//表示是菜品
                 params.dishId = item.id
-              }else{//琛ㄧず濂楅 濂楅娌℃湁鍙ｅ懗
+              }else{//表示套餐 套餐没有口味
                 params.setmealId = item.id
               }
               const res = await addCartApi(params)
@@ -414,7 +414,7 @@
               }
             },
 
-            //鑿滃崟涓噺灏戦€変腑鐨勫晢鍝?
+            //菜单中减少选中的商品
             async subtractCart(item){
                 let params = {
                   dishId:item.id,
@@ -440,19 +440,19 @@
                 }
             },
             
-            //灞曞紑璐墿杞?
+            //展开购物车
             openCart(){
               if(this.cartData.length > 0){
                 this.cartDialogShow = true
               }
             },
-            //璐墿杞︿腑澧炲姞鍟嗗搧鏁伴噺
+            //购物车中增加商品数量
             async cartNumAdd(item){
               let params = {
-                amount:item.amount,//閲戦
-                dishFlavor:item.dishFlavor,//鍙ｅ懗  濡傛灉娌℃湁浼爑ndefined
-                dishId:item.dishId,//鑿滃搧id
-                setmealId:item.setmealId,//濂楅id
+                amount:item.amount,//金额
+                dishFlavor:item.dishFlavor,//口味  如果没有传undefined
+                dishId:item.dishId,//菜品id
+                setmealId:item.setmealId,//套餐id
                 name:item.name,
                 image:item.image
               }
@@ -469,7 +469,7 @@
                 this.$notify({ type:'warning', message:res.msg});
               }
             },
-            //璐墿杞︿腑鍑忓皯鍟嗗搧鏁伴噺
+            //购物车中减少商品数量
             async cartNumberSubtract(item){
               let params = {
                   dishId:item.dishId,
@@ -488,7 +488,7 @@
                 }
             },
             
-            //淇敼鍟嗗搧鍒楄〃涓殑鏁版嵁number
+            //修改商品列表中的数据number
             changeDishList(item){
               for(let ele of this.dishList){
                 if(ele.id === (item.setmealId || item.dishId)){
@@ -497,7 +497,7 @@
               }
             },
             
-            //娓呯┖璐墿杞?
+            //清空购物车
             async clearCart(){
                 const res = await clearCartApi()
                 if(res.code === 1){
@@ -510,7 +510,7 @@
                   this.$notify({ type:'warning', message:res.msg});
                 }
             },
-            //鐐瑰嚮閫夋嫨瑙勬牸
+            //点击选择规格
             chooseFlavorClick(item){
               this.dialogFlavor = {
                 name:'',
@@ -530,11 +530,11 @@
             },
             flavorClick(flavor,item){
               flavor.dishFlavor = item
-              //寮哄埗鍒锋柊dialog鐨刣om
+              //强制刷新dialog的dom
               this.dialogFlavor.show = false
               this.dialogFlavor.show = true
             },
-            //閫夋嫨瑙勬牸鍔犲叆璐墿杞?
+            //选择规格加入购物车
             dialogFlavorAddCart(){
               const dialogFlavor = this.dialogFlavor
               let flag = true
@@ -544,7 +544,7 @@
                   dishFlavor.push(item.dishFlavor)
                 }else{
                       flag = false
-                      Notify({ type: 'warning', message: '璇烽€夋嫨'+ item.name });
+                      Notify({ type: 'warning', message: '请选择'+ item.name });
                 }
               })
               if(flag){
@@ -560,11 +560,11 @@
               }
               
             },
-            //缃戠粶鍥剧墖璺緞杞崲
+            //网络图片路径转换
             imgPathConvert(path){
               return imgPath(path)
             },
-            //璺宠浆鍒板幓缁撶畻鐣岄潰
+            //跳转到去结算界面
             toAddOrderPage(){
               if(this.cartData.length > 0){
                 window.requestAnimationFrame(()=>{
@@ -578,14 +578,14 @@
               })
             },
             async dishDetails(item){
-              //鍏堟竻闄ゅ璞℃暟鎹紝濡傛灉涓嶈鐨勮瘽dialog浣跨敤v-if
+              //先清除对象数据，如果不行的话dialog使用v-if
               this.detailsDialog.item = {}
               this.setMealDialog.item = {}
               if(Array.isArray(item.flavors)){
                 this.detailsDialog.item = item
                 this.detailsDialog.show = true
               }else{
-                //鏄剧ず濂楅鐨勬暟鎹?
+                //显示套餐的数据
                 const res = await setMealDishDetailsApi(item.id)
                 if(res.code === 1){
                   this.setMealDialog.item = {...item,list:res.data}
@@ -601,5 +601,3 @@
       })
   </script>
   </html>
-
-

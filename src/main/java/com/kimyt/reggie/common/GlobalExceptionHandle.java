@@ -30,6 +30,19 @@ public class GlobalExceptionHandle {
 }
 
 
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler(CustomException ex){
+        log.error(ex.getMessage());
+        return R.error(ex.getMessage());
+
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public R<String> exceptionHandler(RuntimeException ex){
+        log.error("运行时异常: {}", ex.getMessage());
+        return R.error(ex.getMessage());
+
+    }
 
 
 

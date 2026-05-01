@@ -29,6 +29,7 @@ public class LoginCheckFilter implements Filter {
                 "/employee/register",
                 "/backend/**",
                 "/front/**",
+                "/common/**"
 
         };
 

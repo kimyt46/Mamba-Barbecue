@@ -1,173 +1,112 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>&#x745E;&#x5409;&#x5916;&#x5356;&#x7BA1;&#x7406;&#x7AEF;</title>
+  <title>瑞吉外卖管理端</title>
   <link rel="shortcut icon" href="../../favicon.ico">
-  <link rel="stylesheet" href="../../plugins/element-ui/index.css">
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/common.css">
   <link rel="stylesheet" href="../../styles/login.css">
-</head>
+  <link rel="stylesheet" href="../../styles/icon/iconfont.css" />
+  <style>
+    .body{
+      min-width: 1366px;
+    }
+  </style>
+</head> 
+
 <body>
-  <div class="login-page" id="login-app">
-    <div class="scene-stars"></div>
-    <div class="scene-glow glow-left"></div>
-    <div class="scene-glow glow-right"></div>
-
-    <div class="scene-world" aria-hidden="true">
-      <div class="floating-tag tag-top">REGGIE BACKSTAGE</div>
-      <div class="floating-tag tag-side">ADMIN LOGIN</div>
-      <div class="toy-block block-a"></div>
-      <div class="toy-block block-b"></div>
-      <div class="toy-block block-c"></div>
-      <div class="floor-shadow"></div>
-      <div class="floor-plane"></div>
+  <div class="login" id="login-app">
+    <div class="login-box">
+      <img src="../../images/login/login-l.png" alt="">
+      <div class="login-form">
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" >
+          <div class="login-form-title">
+            <img src="../../images/login/logo.png" style="width:139px;height:42px;" alt="" />
+          </div>
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号" maxlength="20"
+              prefix-icon="iconfont icon-user" />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="iconfont icon-lock" maxlength="20"
+              @keyup.enter.native="handleLogin" />
+          </el-form-item>
+          <el-form-item style="width:100%;">
+            <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
+              @click.native.prevent="handleLogin">
+              <span v-if="!loading">登录</span>
+              <span v-else>登录中...</span>
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
-
-    <section class="login-console">
-      <div class="console-top">
-        <div class="console-badge">01</div>
-        <div class="console-title-group">
-          <div class="console-kicker">REGGIE CONTROL ROOM</div>
-          <h1>&#x767B;&#x5F55;&#x63A7;&#x5236;&#x53F0;</h1>
-        </div>
-      </div>
-
-      <div class="console-avatar" aria-hidden="true">
-        <div class="console-avatar-core">
-          <i class="el-icon-user-solid"></i>
-        </div>
-      </div>
-
-      <el-form
-        ref="loginForm"
-        :model="loginForm"
-        :rules="loginRules"
-        class="login-form"
-        @submit.native.prevent
-      >
-        <el-form-item prop="username">
-          <label class="field-label">{{ copy.usernameLabel }}</label>
-          <el-input
-            v-model.trim="loginForm.username"
-            type="text"
-            autocomplete="username"
-            :placeholder="copy.usernamePlaceholder"
-            maxlength="20"
-          >
-            <i slot="prefix" class="el-icon-user input-icon"></i>
-          </el-input>
-        </el-form-item>
-
-        <el-form-item prop="password">
-          <label class="field-label">{{ copy.passwordLabel }}</label>
-          <el-input
-            v-model.trim="loginForm.password"
-            type="password"
-            autocomplete="current-password"
-            :placeholder="copy.passwordPlaceholder"
-            maxlength="20"
-            show-password
-            @keyup.enter.native="handleLogin"
-          >
-            <i slot="prefix" class="el-icon-lock input-icon"></i>
-          </el-input>
-        </el-form-item>
-
-        <div class="console-links">
-          <a href="register.html">{{ copy.registerLink }}</a>
-          <span>{{ copy.forgotPassword }}</span>
-        </div>
-
-        <el-form-item class="submit-row">
-          <el-button
-            :loading="loading"
-            class="login-btn"
-            type="primary"
-            @click.native.prevent="handleLogin"
-          >
-            {{ loading ? copy.loadingText : copy.loginButton }}
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </section>
   </div>
 
+  <!-- 开发环境版本，包含了有帮助的命令行警告 -->
   <script src="../../plugins/vue/vue.js"></script>
+  <!-- 引入组件库 -->
   <script src="../../plugins/element-ui/index.js"></script>
+  <!-- 引入axios -->
   <script src="../../plugins/axios/axios.min.js"></script>
   <script src="../../js/request.js"></script>
   <script src="../../js/validate.js"></script>
   <script src="../../api/login.js"></script>
+
   <script>
     new Vue({
       el: '#login-app',
-      data: function () {
+      data() {
         return {
-          loginForm: {
+          loginForm:{
             username: 'admin',
             password: '123456'
           },
-          loading: false,
-          copy: {
-            usernameLabel: '\u8d26\u53f7',
-            passwordLabel: '\u5bc6\u7801',
-            usernamePlaceholder: '\u8bf7\u8f93\u5165\u7ba1\u7406\u8d26\u53f7',
-            passwordPlaceholder: '\u8bf7\u8f93\u5165\u767b\u5f55\u5bc6\u7801',
-            registerLink: '\u7acb\u5373\u6ce8\u518c',
-            forgotPassword: '\u5fd8\u8bb0\u5bc6\u7801',
-            loadingText: '\u542f\u52a8\u4e2d...',
-            loginButton: '\u8FDB \u5165 \u540E \u53F0',
-            loginFailed: '\u767b\u5f55\u5931\u8d25',
-            userRequired: '\u8bf7\u8f93\u5165\u7528\u6237\u540d',
-            passwordRule: '\u5bc6\u7801\u5fc5\u987b\u57286\u4f4d\u4ee5\u4e0a'
-          }
+          loading: false
         }
       },
       computed: {
-        loginRules: function () {
-          var vm = this
-          var validateUsername = function (rule, value, callback) {
-            if (!value) {
-              callback(new Error(vm.copy.userRequired))
-              return
+        loginRules() {
+          const validateUsername = (rule, value, callback) => {
+            if (value.length < 1 ) {
+              callback(new Error('请输入用户名'))
+            } else {
+              callback()
             }
-            callback()
           }
-          var validatePassword = function (rule, value, callback) {
-            if (!value || value.length < 6) {
-              callback(new Error(vm.copy.passwordRule))
-              return
+          const validatePassword = (rule, value, callback) => {
+            if (value.length < 6) {
+              callback(new Error('密码必须在6位以上'))
+            } else {
+              callback()
             }
-            callback()
           }
           return {
-            username: [{ validator: validateUsername, trigger: 'blur' }],
-            password: [{ validator: validatePassword, trigger: 'blur' }]
+            'username': [{ 'validator': validateUsername, 'trigger': 'blur' }],
+            'password': [{ 'validator': validatePassword, 'trigger': 'blur' }]
           }
         }
       },
+      created() {
+      },
       methods: {
-        handleLogin: function () {
-          var vm = this
-          this.$refs.loginForm.validate(async function (valid) {
-            if (!valid) {
-              return
-            }
-            vm.loading = true
-            try {
-              var res = await loginApi(vm.loginForm)
+        async handleLogin() {
+          this.$refs.loginForm.validate(async (valid) => {
+            if (valid) {
+              this.loading = true
+              let res = await loginApi(this.loginForm)
               if (String(res.code) === '1') {
-                localStorage.setItem('userInfo', JSON.stringify(res.data))
-                window.location.href = '/backend/index.html'
-                return
+                localStorage.setItem('userInfo',JSON.stringify(res.data))
+                window.location.href= '/backend/index.html'
+              } else {
+                this.$message.error(res.msg)
+                this.loading = false
               }
-              vm.$message.error(res.msg || vm.copy.loginFailed)
-            } catch (error) {
-              console.error(error)
-            } finally {
-              vm.loading = false
             }
           })
         }
@@ -175,4 +114,5 @@
     })
   </script>
 </body>
+
 </html>
