@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -81,7 +81,7 @@
           }
           const validatePassword = (rule, value, callback) => {
             if (value.length < 6) {
-              callback(new Error('密码必须在6位以上'))
+              callback(new Error('密码必须6位以上'))
             } else {
               callback()
             }
@@ -102,6 +102,7 @@
               let res = await loginApi(this.loginForm)
               if (String(res.code) === '1') {
                 localStorage.setItem('userInfo',JSON.stringify(res.data))
+                sessionStorage.setItem('backendLoginEntry', '1')
                 window.location.href= '/backend/index.html'
               } else {
                 this.$message.error(res.msg)
@@ -116,3 +117,4 @@
 </body>
 
 </html>
+

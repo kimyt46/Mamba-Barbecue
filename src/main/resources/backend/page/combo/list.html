@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <!-- 引入样式 -->
+  <title>套餐管理</title>
   <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
   <link rel="stylesheet" href="../../styles/common.css" />
   <link rel="stylesheet" href="../../styles/page.css" />
 </head>
 <body>
-   <div class="dashboard-container" id="combo-app">
+  <div class="dashboard-container" id="combo-app">
     <div class="container">
       <div class="tableBar">
         <el-input
@@ -29,17 +28,10 @@
           ></i>
         </el-input>
         <div class="tableLab">
-          <span class="span-btn delBut non" @click="deleteHandle('批量')">批量删除</span>
+          <span class="span-btn delBut non" @click="deleteHandle('批量', null)">批量删除</span>
           <span class="span-btn blueBug non" @click="statusHandle('1')">批量启售</span>
-          <span
-            style="border:none;"
-            class="span-btn delBut non"
-            @click="statusHandle('0')"
-          >批量停售</span>
-          <el-button
-            type="primary"
-            @click="addSetMeal('add')"
-          >
+          <span style="border:none;" class="span-btn delBut non" @click="statusHandle('0')">批量停售</span>
+          <el-button type="primary" @click="addSetMeal('add')">
             + 新建套餐
           </el-button>
         </div>
@@ -50,50 +42,34 @@
         class="tableBox"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
-          type="selection"
-          width="25"
-        ></el-table-column>
-        <el-table-column
-          prop="name"
-          label="套餐名称"
-        ></el-table-column>
-        <el-table-column prop="image" label="图片"  align="center">
+        <el-table-column type="selection" width="25"></el-table-column>
+        <el-table-column prop="name" label="套餐名称"></el-table-column>
+        <el-table-column prop="image" label="图片" align="center">
           <template slot-scope="{ row }">
-            <el-image style="width: auto; height: 40px; border:none;cursor: pointer;" :src="getImage(row.image)" :preview-src-list="[ `/common/download?name=${row.image}` ]" >
+            <el-image
+              style="width: auto; height: 40px; border:none;cursor: pointer;"
+              :src="getImage(row.image)"
+              :preview-src-list="[ `/common/download?name=${row.image}` ]"
+            >
               <div slot="error" class="image-slot">
-                <img src="./../../images/noImg.png"  style="width: auto; height: 40px; border:none;" >
-              </div> 
+                <img src="./../../images/noImg.png" style="width: auto; height: 40px; border:none;">
+              </div>
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="categoryName"
-          label="套餐分类"
-        ></el-table-column>
-        <el-table-column
-          prop="price"
-          label="套餐价"
-        >
+        <el-table-column prop="categoryName" label="套餐分类"></el-table-column>
+        <el-table-column prop="price" label="套餐价">
           <template slot-scope="scope">
-            <span>￥{{ scope.row.price/100 }}</span>
+            <span>￥{{ scope.row.price / 100 }}</span>
           </template>
         </el-table-column>
         <el-table-column label="售卖状态">
           <template slot-scope="scope">
-            <span>{{ scope.row.status == '0' ? '停售' : '启售' }}</span>
+            <span>{{ String(scope.row.status) === '0' ? '停售' : '启售' }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="updateTime"
-          label="最后操作时间"
-        >
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width="160"
-          align="center"
-        >
+        <el-table-column prop="updateTime" label="最后操作时间"></el-table-column>
+        <el-table-column label="操作" width="160" align="center">
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -109,7 +85,7 @@
               class="blueBug"
               @click="statusHandle(scope.row)"
             >
-              {{ scope.row.status == '0' ? '启售' : '停售' }}
+              {{ String(scope.row.status) === '0' ? '启售' : '停售' }}
             </el-button>
             <el-button
               type="text"
@@ -134,149 +110,134 @@
       ></el-pagination>
     </div>
   </div>
-    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
-    <script src="../../plugins/vue/vue.js"></script>
-    <!-- 引入组件库 -->
-    <script src="../../plugins/element-ui/index.js"></script>
-    <!-- 引入axios -->
-    <script src="../../plugins/axios/axios.min.js"></script>
-    <script src="../../js/request.js"></script>
-    <script src="../../api/combo.js"></script>
-    <script>
-      new Vue({
-        el: '#combo-app',
-        data() {
-          return {
-             input: '',
-             counts: 0,
-             page: 1,
-             pageSize: 10,
-             tableData : [],
-             dishState : '',
-             checkList: []
+  <script src="../../plugins/vue/vue.js"></script>
+  <script src="../../plugins/element-ui/index.js"></script>
+  <script src="../../plugins/axios/axios.min.js"></script>
+  <script src="../../js/request.js"></script>
+  <script src="../../api/combo.js"></script>
+  <script>
+    new Vue({
+      el: "#combo-app",
+      data() {
+        return {
+          input: "",
+          counts: 0,
+          page: 1,
+          pageSize: 10,
+          tableData: [],
+          checkList: [],
+        };
+      },
+      created() {
+        this.init();
+      },
+      methods: {
+        async init() {
+          const params = {
+            page: this.page,
+            pageSize: this.pageSize,
+            name: this.input ? this.input : undefined,
+          };
+          try {
+            const res = await getSetmealPage(params);
+            if (String(res.code) === "1") {
+              this.tableData = (res.data && res.data.records) || [];
+              this.counts = (res.data && res.data.total) || 0;
+            }
+          } catch (err) {
+            this.$message.error("请求出错了：" + err);
           }
         },
-        computed: {},
-        created() {
-          this.init()
+        getImage(image) {
+          return `/common/download?name=${image}`;
         },
-        mounted() {
+        handleQuery() {
+          this.page = 1;
+          this.init();
         },
-        methods: {
-          async init () {
-            const params = {
-              page: this.page,
-              pageSize: this.pageSize,
-              name: this.input ? this.input : undefined
-            }
-            await getSetmealPage(params).then(res => {
-              if (String(res.code) === '1') {
-                this.tableData = res.data.records || []
-                this.counts = res.data.total
-              }
-            }).catch(err => {
-              this.$message.error('请求出错了：' + err)
-            })
-          },
-          getImage (image) {
-            return `/common/download?name=${image}`
-          },
-          handleQuery() {
-            this.page = 1;
-            this.init();
-          },
-          // 添加
-          addSetMeal (st) {
-            if (st === 'add'){
-              window.parent.menuHandle({
-                id: '5',
-                url: '/backend/page/combo/add.html',
-                name: '添加套餐'
-              },true)
-            } else {
-              window.parent.menuHandle({
-                id: '5',
-                url: '/backend/page/combo/add.html?id='+st,
-                name: '修改套餐'
-              },true)
-            }
-          },
-
-          // 删除
-          deleteHandle (type, id) {
-            if (type === '批量' && id === null) {
-              if (this.checkList.length === 0) {
-                return this.$message.error('请选择删除对象')
-              }
-            }
-            this.$confirm('确定删除该套餐, 是否继续?', '确定删除', {
-              'confirmButtonText': '确定',
-              'cancelButtonText': '取消',
-            }).then(() => {
-              deleteSetmeal(type === '批量' ? this.checkList.join(',') : id).then(res => {
-                if (res.code === 1) {
-                  this.$message.success('删除成功！')
-                  this.handleQuery()
-                } else {
-                  this.$message.error(res.msg || '操作失败')
-                }
-              }).catch(err => {
-                this.$message.error('请求出错了：' + err)
-              })
-            })
-          },
-
-          //状态更改
-          statusHandle (row) {
-            let params = {}
-            if (typeof row === 'string' ){
-              if (this.checkList.length == 0){
-                this.$message.error('批量操作，请先勾选操作菜品！')
-                return false
-              }
-              params.ids = this.checkList.join(',')
-              params.status = row
-            } else {
-              params.ids = row.id
-              params.status = row.status ? '0' : '1'
-            }
-            this.$confirm('确认更改该套餐状态?', '提示', {
-              'confirmButtonText': '确定',
-              'cancelButtonText': '取消',
-              'type': 'warning'
-            }).then(() => {
-              // 起售停售---批量起售停售接口
-              setmealStatusByStatus(params).then(res => {
-                if (res.code === 1) {
-                  this.$message.success('套餐状态已经更改成功！')
-                  this.handleQuery()
-                } else {
-                  this.$message.error(res.msg || '操作失败')
-                }
-              }).catch(err => {
-                  this.$message.error('请求出错了：' + err)
-              })
-            })
-          },
-
-          // 全部操作
-          handleSelectionChange (val){
-            let checkArr = []
-            val.forEach((n) => {
-              checkArr.push(n.id)
-            })
-            this.checkList = checkArr
-          },
-          handleSizeChange (val) {
-            this.pageSize = val
-            this.init()
-          },
-          handleCurrentChange (val) {
-            this.page = val
-            this.init()
+        addSetMeal(st) {
+          if (st === "add") {
+            window.parent.menuHandle({
+              id: "5",
+              url: "/backend/page/combo/add.html",
+              name: "添加套餐",
+            }, true);
+          } else {
+            window.parent.menuHandle({
+              id: "5",
+              url: "/backend/page/combo/add.html?id=" + st,
+              name: "修改套餐",
+            }, true);
           }
-        }
-      })
-    </script>
+        },
+        deleteHandle(type, id) {
+          if (type === "批量" && this.checkList.length === 0) {
+            this.$message.error("请选择删除对象");
+            return;
+          }
+          this.$confirm("确定删除该套餐吗？", "确定删除", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+          }).then(async () => {
+            try {
+              const ids = type === "批量" ? this.checkList.join(",") : id;
+              const res = await deleteSetmeal(ids);
+              if (String(res.code) === "1") {
+                this.$message.success("删除成功");
+                this.checkList = [];
+                this.handleQuery();
+              } else {
+                this.$message.error(res.msg || "操作失败");
+              }
+            } catch (err) {
+              this.$message.error("请求出错了：" + err);
+            }
+          });
+        },
+        statusHandle(row) {
+          const params = {};
+          if (typeof row === "string") {
+            if (this.checkList.length === 0) {
+              this.$message.error("批量操作前请先勾选套餐");
+              return;
+            }
+            params.ids = this.checkList.join(",");
+            params.status = row;
+          } else {
+            params.ids = row.id;
+            params.status = String(row.status) === "1" ? "0" : "1";
+          }
+          this.$confirm("确认更改该套餐状态吗？", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          }).then(async () => {
+            try {
+              const res = await setmealStatusByStatus(params);
+              if (String(res.code) === "1") {
+                this.$message.success("套餐状态更改成功");
+                this.handleQuery();
+              } else {
+                this.$message.error(res.msg || "操作失败");
+              }
+            } catch (err) {
+              this.$message.error("请求出错了：" + err);
+            }
+          });
+        },
+        handleSelectionChange(val) {
+          this.checkList = val.map((item) => item.id);
+        },
+        handleSizeChange(val) {
+          this.pageSize = val;
+          this.init();
+        },
+        handleCurrentChange(val) {
+          this.page = val;
+          this.init();
+        },
+      },
+    });
+  </script>
 </body>
 </html>

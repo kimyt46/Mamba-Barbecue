@@ -1,10 +1,11 @@
 html,
 body {
-  max-width: 750px;
+  width: 100%;
   height: 100%;
   background: #f3f2f7;
   font-family: Helvetica;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 html,
@@ -90,6 +91,21 @@ i {
 
 .app {
   height: 100%;
+  margin: 0 auto;
+  max-width: 750px;
+}
+
+#login {
+  margin: 0 auto;
+  max-width: 750px;
+}
+
+@media screen and (min-width: 751px) {
+  body > .app,
+  body > #login {
+    width: 375rem;
+    min-height: 100%;
+  }
 }
 
 .van-overlay {

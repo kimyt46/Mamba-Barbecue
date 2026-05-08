@@ -49,8 +49,13 @@
   letter-spacing: 0px;
 }
 
+#login .divContainer span.disabled {
+  color: #999999;
+  cursor: not-allowed;
+}
+
 #login .divMsg {
-  width: 168px;
+  width: 190px;
   height: 17px;
   opacity: 1;
   font-size: 12px;
@@ -76,21 +81,26 @@
   text-align: center;
 }
 
-#login .btnNoPhone {
+#login .btnNoEmail {
   color: #666666;
   background: #d8d8d8;
 }
 
-#login .btnNoPhone:active {
+#login .btnNoEmail:active {
   background: #afafaf;
 }
 
-#login .btnPhone {
+#login .btnEmail {
   background: #ffc200;
   color: #333333;
 }
 
-#login .btnPhone:active {
+#login .btnEmail:active {
   background: rgba(255, 142, 0, 1);
   color: #333333;
+}
+
+.van-notify {
+  min-height: auto;
+  height: auto;
 }

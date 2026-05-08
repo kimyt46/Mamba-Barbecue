@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -204,7 +204,7 @@
                 return this.$message.error('请选择删除对象')
               }
             }
-            this.$confirm('确认删除该菜品, 是否继续?', '确定删除', {
+            this.$confirm('确认删除该菜品，是否继续?', '确定删除', {
               'confirmButtonText': '确定',
               'cancelButtonText': '取消',
             }).then(() => {
@@ -221,7 +221,7 @@
             })
           },
 
-          //状态更改
+          // 状态更改
           statusHandle (row) {
             let params = {}
             if (typeof row === 'string' ) {
@@ -233,10 +233,10 @@
               params.status = row
             } else {
               params.id = row.id
-              params.status = row.status ? '0' : '1'
+              params.status = String(row.status) === '1' ? '0' : '1'
             }
             this.dishState = params
-            this.$confirm('确认更改该菜品状态?', '提示', {
+            this.$confirm('确认更改该菜品状态', '提示', {
               'confirmButtonText': '确定',
               'cancelButtonText': '取消',
               'type': 'warning'

@@ -1,91 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-        <title>菩提阁</title>
-        <link rel="icon" href="./../images/favico.ico">
-        <!--不同屏幕尺寸根字体设置-->
-        <script src="./../js/base.js"></script>
-        <!--element-ui的样式-->
-        <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css" />
-        <!--引入vant样式-->
-        <link rel="stylesheet" href="../styles/vant.min.css"/>
-        <!-- 引入样式  -->
-        <link rel="stylesheet" href="../styles/index.css" />
-        <!--本页面内容的样式-->
-        <link rel="stylesheet" href="./../styles/login.css" />
-      </head>
-    <body>
-        <div id="login" v-loading="loading">
-            <div class="divHead">登录</div>
-            <div class="divContainer">
-                <el-input placeholder=" 请输入手机号码" v-model="form.phone"  maxlength='20'/></el-input>
-                <div class="divSplit"></div>
-                <el-input placeholder=" 请输入验证码" v-model="form.code"  maxlength='20'/></el-input>
-                <span @click='getCode'>获取验证码</span>
-            </div>
-            <div class="divMsg" v-if="msgFlag">手机号输入不正确，请重新输入</div>
-            <el-button type="primary" :class="{btnSubmit:1===1,btnNoPhone:!form.phone,btnPhone:form.phone}" @click="btnLogin">登录</el-button>
-        </div>
-        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
-        <script src="../../backend/plugins/vue/vue.js"></script>
-        <!-- 引入组件库 -->
-        <script src="../../backend/plugins/element-ui/index.js"></script>
-        <!-- 引入vant样式 -->
-        <script src="./../js/vant.min.js"></script>  
-        <!-- 引入axios -->
-        <script src="../../backend/plugins/axios/axios.min.js"></script>
-        <script src="./../js/request.js"></script>
-        <script src="./../api/login.js"></script>
-    </body>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+    <title>菩提阁</title>
+    <link rel="icon" href="./../images/favico.ico" />
+    <script src="./../js/base.js?v=20260507-frontfix5"></script>
+    <link rel="stylesheet" href="../../backend/plugins/element-ui/index.css?v=20260507-frontfix5" />
+    <link rel="stylesheet" href="../styles/vant.min.css?v=20260507-frontfix5" />
+    <link rel="stylesheet" href="../styles/index.css?v=20260507-frontfix5" />
+    <link rel="stylesheet" href="./../styles/login.css?v=20260507-frontfix5" />
+  </head>
+  <body>
+    <div id="login" v-loading="loading">
+      <div class="divHead">登录</div>
+      <div class="divContainer">
+        <el-input
+          placeholder="请输入邮箱"
+          v-model.trim="form.email"
+          maxlength="64"
+        ></el-input>
+        <div class="divSplit"></div>
+        <el-input
+          placeholder="请输入验证码"
+          v-model.trim="form.code"
+          maxlength="6"
+        ></el-input>
+        <span :class="{ disabled: codeLoading }" @click="getCode">
+          {{ codeLoading ? "发送中..." : "获取验证码" }}
+        </span>
+      </div>
+      <div class="divMsg" v-if="msgFlag">邮箱格式不正确，请重新输入</div>
+      <el-button
+        type="primary"
+        :class="{ btnSubmit: true, btnNoEmail: !form.email, btnEmail: !!form.email }"
+        @click="btnLogin"
+      >
+        登录
+      </el-button>
+    </div>
+
+    <script src="../../backend/plugins/vue/vue.js?v=20260507-frontfix5"></script>
+    <script src="../../backend/plugins/element-ui/index.js?v=20260507-frontfix5"></script>
+    <script src="./../js/vant.min.js?v=20260507-frontfix5"></script>
+    <script src="../../backend/plugins/axios/axios.min.js?v=20260507-frontfix5"></script>
+    <script src="./../js/request.js?v=20260507-frontfix5"></script>
+    <script src="./../api/login.js?v=20260507-frontfix5"></script>
     <script>
-        new Vue({
-            el:"#login",
-            data(){
-                return {
-                    form:{
-                        phone:'',
-                        code:''
-                    },
-                    msgFlag:false,
-                    loading:false
-                }
+      const PAGE_VERSION = "20260507-frontfix5";
+
+      new Vue({
+        el: "#login",
+        data() {
+          return {
+            form: {
+              email: "",
+              code: "",
             },
-            computed:{},
-            created(){},
-            mounted(){},
-            methods:{
-                getCode(){
-                    this.form.code = ''
-                    const regex = /^(13[0-9]{9})|(15[0-9]{9})|(17[0-9]{9})|(18[0-9]{9})|(19[0-9]{9})$/;
-                    if (regex.test(this.form.phone)) {
-                        this.msgFlag = false
-                        this.form.code = (Math.random()*1000000).toFixed(0)
-                    }else{
-                        this.msgFlag = true
-                    }
-                },
-                async btnLogin(){
-                    if(this.form.phone && this.form.code){
-                        this.loading = true
-                        const res = await loginApi({phone:this.form.phone})
-                        this.loading = false
-                        if(res.code === 1){
-                            sessionStorage.setItem("userPhone",this.form.phone)
-                            window.requestAnimationFrame(()=>{
-                                window.location.href= '/front/index.html'
-                            })                           
-                        }else{
-                            this.$notify({ type:'warning', message:res.msg});
-                        }
-                    }else{
-                        this.$notify({ type:'warning', message:'请输入手机号码'});
-                    }
-                }
+            msgFlag: false,
+            loading: false,
+            codeLoading: false,
+          };
+        },
+        methods: {
+          isSuccess(res) {
+            return (
+              !!res &&
+              (res.code === 1 ||
+                res.code === "1" ||
+                res.msg === "验证码发送成功" ||
+                res.data === "验证码发送成功")
+            );
+          },
+          checkEmail() {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            this.msgFlag = !regex.test(this.form.email);
+            return !this.msgFlag;
+          },
+          async getCode() {
+            if (this.codeLoading) {
+              return;
             }
-        })
+            this.form.code = "";
+            if (!this.checkEmail()) {
+              return;
+            }
+
+            this.codeLoading = true;
+            try {
+              const res = await sendEmailCodeApi({ email: this.form.email });
+              if (this.isSuccess(res)) {
+                this.$notify({ type: "success", message: "验证码已发送，请查看邮箱" });
+                return;
+              }
+              console.warn("sendMsg response:", res);
+            } catch (error) {
+              console.warn("sendMsg request error:", error);
+            } finally {
+              this.codeLoading = false;
+            }
+          },
+          async btnLogin() {
+            if (!(this.form.email && this.form.code && this.checkEmail())) {
+              this.$notify({ type: "warning", message: "请输入邮箱和验证码" });
+              return;
+            }
+
+            this.loading = true;
+            try {
+              const res = await loginApi({
+                email: this.form.email,
+                code: this.form.code,
+              });
+              if (res && (res.code === 1 || res.code === "1")) {
+                sessionStorage.setItem("userEmail", this.form.email);
+                window.requestAnimationFrame(() => {
+                  window.location.href = "/front/index.html?v=" + PAGE_VERSION;
+                });
+                return;
+              }
+              this.$notify({
+                type: "warning",
+                message: (res && res.msg) || "登录失败",
+              });
+            } catch (error) {
+              const message =
+                error &&
+                error.response &&
+                error.response.data &&
+                error.response.data.msg
+                  ? error.response.data.msg
+                  : "登录失败，请检查后端服务";
+              this.$notify({ type: "warning", message: message });
+            } finally {
+              this.loading = false;
+            }
+          },
+        },
+      });
     </script>
+  </body>
 </html>

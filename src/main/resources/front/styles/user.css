@@ -101,6 +101,21 @@
   align-items: center;
 }
 
+#user .divLinks .item .linkText {
+  flex: 1;
+  font-size: 15rem;
+  font-family: PingFangSC, PingFangSC-Regular;
+  color: #333333;
+  line-height: 21rem;
+  padding-left: 6rem;
+}
+
+#user .divLinks .item .linkArrow {
+  font-size: 18rem;
+  color: #999999;
+  line-height: 1;
+}
+
 #user .divLinks .divSplit {
   height: 1rem;
   opacity: 1;
@@ -112,13 +127,6 @@
   width: 18rem;
   height: 18rem;
   margin-right: 5rem;
-}
-
-#user .divLinks .item i {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translate(0, -50%);
 }
 
 #user .divOrders {
@@ -205,6 +213,15 @@
   margin-top: 20rem;
   display: flex;
   justify-content: flex-end;
+}
+
+#user .divOrders .emptyOrder {
+  height: 80rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14rem;
+  color: #999999;
 }
 
 #user .divOrders .btn .btnAgain {

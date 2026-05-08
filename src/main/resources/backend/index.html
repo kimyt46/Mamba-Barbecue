@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -109,6 +109,23 @@
     <script src="js/request.js"></script>
     <script src="./api/login.js"></script>
     <script>
+      const BACKEND_PAGE_VERSION = '20260507-backfix2'
+      const withVersion = (url) => {
+        if (!url) {
+          return url
+        }
+        return url.includes('?')
+          ? `${url}&v=${BACKEND_PAGE_VERSION}`
+          : `${url}?v=${BACKEND_PAGE_VERSION}`
+      }
+
+      const DEFAULT_MENU = {
+        id: '2',
+        url: 'page/member/list.html',
+        name: '员工管理'
+      }
+      const BACKEND_PAGE_STATE_KEY = 'backendPageState'
+      const BACKEND_LOGIN_ENTRY_KEY = 'backendLoginEntry'
 
       new Vue({
         el: '#app',
@@ -155,7 +172,7 @@
               //   ],
               // },
             ],
-            iframeUrl: 'page/member/list.html',
+            iframeUrl: withVersion(DEFAULT_MENU.url),
             headTitle: '员工管理',
             goBackFlag: false,
             loading: true,
@@ -168,6 +185,7 @@
           if (userInfo) {
             this.userInfo = JSON.parse(userInfo)
           }
+          this.restorePageState()
           this.closeLoading()
         },
         beforeDestroy() {
@@ -182,6 +200,8 @@
             logoutApi().then((res)=>{
               if(res.code === 1){
                 localStorage.removeItem('userInfo')
+                localStorage.removeItem(BACKEND_PAGE_STATE_KEY)
+                sessionStorage.removeItem(BACKEND_LOGIN_ENTRY_KEY)
                 window.location.href = '/backend/page/login/login.html'
               }
             })
@@ -196,10 +216,59 @@
           menuHandle(item, goBackFlag) {
             this.loading = true
             this.menuActived = item.id
-            this.iframeUrl = item.url
+            this.defAct = item.id
+            this.iframeUrl = withVersion(item.url)
             this.headTitle = item.name
             this.goBackFlag = goBackFlag
+            this.persistPageState(item, goBackFlag)
             this.closeLoading()
+          },
+          getDefaultMenu() {
+            return this.menuList.find(item => item.id === DEFAULT_MENU.id) || DEFAULT_MENU
+          },
+          restorePageState() {
+            const loginEntry = sessionStorage.getItem(BACKEND_LOGIN_ENTRY_KEY)
+            sessionStorage.removeItem(BACKEND_LOGIN_ENTRY_KEY)
+            if (loginEntry === '1') {
+              const defaultMenu = this.getDefaultMenu()
+              this.menuActived = defaultMenu.id
+              this.defAct = defaultMenu.id
+              this.iframeUrl = withVersion(defaultMenu.url)
+              this.headTitle = defaultMenu.name
+              this.goBackFlag = false
+              this.persistPageState(defaultMenu, false)
+              return
+            }
+
+            const pageState = localStorage.getItem(BACKEND_PAGE_STATE_KEY)
+            if (!pageState) {
+              return
+            }
+
+            try {
+              const savedPage = JSON.parse(pageState)
+              if (!savedPage || !savedPage.id || !savedPage.url || !savedPage.name) {
+                return
+              }
+              this.menuActived = savedPage.id
+              this.defAct = savedPage.id
+              this.iframeUrl = withVersion(savedPage.url)
+              this.headTitle = savedPage.name
+              this.goBackFlag = !!savedPage.goBackFlag
+            } catch (e) {
+              localStorage.removeItem(BACKEND_PAGE_STATE_KEY)
+            }
+          },
+          persistPageState(item, goBackFlag) {
+            if (!item || !item.id || !item.url || !item.name) {
+              return
+            }
+            localStorage.setItem(BACKEND_PAGE_STATE_KEY, JSON.stringify({
+              id: item.id,
+              url: item.url,
+              name: item.name,
+              goBackFlag: !!goBackFlag
+            }))
           },
           closeLoading(){
             this.timer = null
@@ -212,3 +281,4 @@
     </script>
   </body>
 </html>
+

@@ -20,7 +20,8 @@ function orderPagingApi(data) {
   return $axios({
       'url': '/order/userPage',
       'method': 'get',
-      params:{...data}
+      params:{...data},
+      silent: true
   })
 }
 

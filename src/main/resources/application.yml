@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   application:
     name: reggie_take_out
@@ -16,10 +17,24 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 3083156955@qq.com
+    password: vskckverxrznddgh
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 mybatis-plus:
   configuration:
-    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
@@ -27,5 +42,5 @@ mybatis-plus:
       id-type: ASSIGN_ID
 
 reggie:
-    path: D:\img\
+  path: D:\img\
 

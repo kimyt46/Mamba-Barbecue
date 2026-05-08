@@ -1,5 +1,6 @@
 package com.kimyt.reggie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kimyt.reggie.dto.DishDto;
 import com.kimyt.reggie.entity.Dish;
@@ -8,6 +9,7 @@ import com.kimyt.reggie.mapper.DishMapper;
 import com.kimyt.reggie.service.DishFlavorService;
 import com.kimyt.reggie.service.DishService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,8 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
 @Autowired
 private DishFlavorService dishFlavorService;
 
-@Transactional
+
+    @Transactional
     @Override
     public void saveWithFlavor(DishDto dishDto) {
 
@@ -38,6 +41,41 @@ private DishFlavorService dishFlavorService;
         }
         dishFlavorService.saveBatch(flavors);
 
+
+    }
+
+    @Override
+    public DishDto getByIdWithFlavor(Long id) {
+        Dish dish = super.getById(id);
+        DishDto dishDto=new DishDto();
+        BeanUtils.copyProperties(dish, dishDto);
+        LambdaQueryWrapper<DishFlavor> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(DishFlavor::getDishId,dish.getId());
+        List<DishFlavor> flavors = dishFlavorService.list(queryWrapper);
+        dishDto.setFlavors(flavors);
+
+        return dishDto;
+    }
+
+    @Transactional
+    @Override
+    public void updateWithFlavor(DishDto dishDto) {
+
+        super.updateById(dishDto);
+
+        Long dishId = dishDto.getId();
+
+        LambdaQueryWrapper<DishFlavor> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(DishFlavor::getDishId, dishId);
+        dishFlavorService.remove(queryWrapper);
+
+        List<DishFlavor> flavors = dishDto.getFlavors();
+        if (flavors != null && !flavors.isEmpty()) {
+            for(DishFlavor dishFlavor : flavors){
+                dishFlavor.setDishId(dishId);
+            }
+            dishFlavorService.saveBatch(flavors);
+        }
 
     }
 }
