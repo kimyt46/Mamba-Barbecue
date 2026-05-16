@@ -11,6 +11,7 @@ import com.kimyt.reggie.mapper.SetmealMapper;
 import com.kimyt.reggie.service.SetmealDishService;
 import com.kimyt.reggie.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+
 
 
 
@@ -67,6 +69,40 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         LambdaQueryWrapper<SetmealDish> queryWrapper1=new LambdaQueryWrapper<>();
         queryWrapper1.in(SetmealDish::getSetmealId,ids);
         setmealDishService.remove(queryWrapper1);
+
+
+    }
+
+    @Override
+    public SetmealDto getByIdWithDish(Long id) {
+        Setmeal setmeal = super.getById(id);
+        SetmealDto setmealDto=new SetmealDto();
+        BeanUtils.copyProperties(setmeal,setmealDto);
+        LambdaQueryWrapper<SetmealDish> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealDish::getSetmealId,id);
+        List<SetmealDish> list = setmealDishService.list(queryWrapper);
+        setmealDto.setSetmealDishes(list);
+
+        return setmealDto;
+
+    }
+
+    @Override
+    public void updateWithDish(SetmealDto setmealDto) {
+        super.updateById(setmealDto);
+        Long setmealId = setmealDto.getId();
+        LambdaQueryWrapper<SetmealDish> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealDish::getSetmealId,setmealDto.getId());
+        setmealDishService.remove(queryWrapper);
+        List<SetmealDish> setmealDishes = setmealDto.getSetmealDishes();
+        if(setmealDishes!=null && !setmealDishes.isEmpty()){
+            for(SetmealDish setmealDish:setmealDishes){
+                setmealDish.setSetmealId(setmealId);
+
+            }
+            setmealDishService.saveBatch(setmealDishes);
+
+        }
 
 
     }

@@ -45,6 +45,22 @@ public class SetmealController {
 
     }
 
+    @GetMapping("/{id}")
+    public R<SetmealDto> get(@PathVariable Long id){
+        SetmealDto setmealDto = setmealService.getByIdWithDish(id);
+        return R.success(setmealDto);
+
+    }
+
+    @PutMapping
+    public R<String> updateSetmeal(@RequestBody SetmealDto setmealDto){
+        log.info("修改套餐信息：{}", setmealDto);
+        setmealService.updateWithDish(setmealDto);
+        return R.success("修改套餐成功");
+
+    }
+
+
 
     @GetMapping("/page")
     public R<Page> page(int page, int pageSize, String name) {
