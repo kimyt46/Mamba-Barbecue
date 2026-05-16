@@ -78,4 +78,38 @@ public class ShoppingCartController {
 
     }
 
+    @PostMapping("/sub")
+    public R<ShoppingCart> sub(@RequestBody ShoppingCart shoppingCart){
+        log.info("减少购物车商品：{}",shoppingCart);
+        Long currentId = BaseContext.getCurrentId();
+        
+        LambdaQueryWrapper<ShoppingCart> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId,currentId);
+        if (shoppingCart.getDishId() != null) {
+            queryWrapper.eq(ShoppingCart::getDishId,shoppingCart.getDishId());
+            
+        }
+        else {
+            queryWrapper.eq(ShoppingCart::getSetmealId,shoppingCart.getSetmealId());
+            
+        }
+
+        ShoppingCart cartServiceOne = shoppingCartService.getOne(queryWrapper);
+        if (cartServiceOne!=null){
+            Integer number = cartServiceOne.getNumber();
+            if(number > 1){
+                cartServiceOne.setNumber(number - 1);
+                shoppingCartService.updateById(cartServiceOne);
+            }
+            else {
+                shoppingCartService.removeById(cartServiceOne.getId());
+                cartServiceOne.setNumber(0);
+            }
+            return R.success(cartServiceOne);
+        }
+        return R.error("购物车中不存在该商品");
+
+    }
+
+
 }

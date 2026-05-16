@@ -25,9 +25,8 @@ import java.util.regex.Pattern;
 public class UserController {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
-    private static final String EMAIL_CODE_PREFIX = "emailCode:";
-    private static final String EMAIL_CODE_TIME_PREFIX = "emailCodeTime:";
     private static final long EMAIL_CODE_EXPIRE_MILLIS = 5 * 60 * 1000L;
+    private static final long SEND_INTERVAL_MILLIS = 60 * 1000L;
 
     @Autowired
     private UserService userService;
@@ -45,6 +44,11 @@ public class UserController {
             return R.error("邮箱格式不正确");
         }
 
+        Long lastSendTime = emailService.getSendTimeFromRedis(email);
+        if (lastSendTime != null && System.currentTimeMillis() - lastSendTime < SEND_INTERVAL_MILLIS) {
+            return R.error("验证码已发送，请1分钟后再试");
+        }
+
         String code = emailService.generateCode();
         try {
             emailService.sendVerificationCode(email, code);
@@ -53,8 +57,8 @@ public class UserController {
             return R.error("验证码发送失败，请检查邮箱配置");
         }
 
-        request.getSession().setAttribute(EMAIL_CODE_PREFIX + email, code);
-        request.getSession().setAttribute(EMAIL_CODE_TIME_PREFIX + email, System.currentTimeMillis());
+        emailService.saveCodeToRedis(email, code);
+        emailService.saveSendTimeToRedis(email);
         return R.success("验证码发送成功");
     }
 
@@ -73,18 +77,9 @@ public class UserController {
             return R.error("请输入验证码");
         }
 
-        String sessionKey = EMAIL_CODE_PREFIX + email;
-        String sessionTimeKey = EMAIL_CODE_TIME_PREFIX + email;
-        Object sessionCode = request.getSession().getAttribute(sessionKey);
-        Object sessionCodeTime = request.getSession().getAttribute(sessionTimeKey);
-        if (sessionCode == null || !code.equals(sessionCode.toString())) {
-            return R.error("验证码错误");
-        }
-        if (!(sessionCodeTime instanceof Long)
-                || System.currentTimeMillis() - (Long) sessionCodeTime > EMAIL_CODE_EXPIRE_MILLIS) {
-            request.getSession().removeAttribute(sessionKey);
-            request.getSession().removeAttribute(sessionTimeKey);
-            return R.error("验证码已过期，请重新获取");
+        String sessionCode = emailService.getCodeFromRedis(email);
+        if (sessionCode == null || !code.equals(sessionCode)) {
+            return R.error("验证码错误或已过期");
         }
 
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
@@ -102,8 +97,7 @@ public class UserController {
         }
 
         request.getSession().setAttribute("user", user.getId());
-        request.getSession().removeAttribute(sessionKey);
-        request.getSession().removeAttribute(sessionTimeKey);
+        emailService.deleteCodeFromRedis(email);
         return R.success(user);
     }
 
