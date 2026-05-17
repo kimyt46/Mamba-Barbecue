@@ -8,6 +8,7 @@ import com.kimyt.reggie.common.CustomException;
 import com.kimyt.reggie.entity.*;
 import com.kimyt.reggie.mapper.OrderMapper;
 import com.kimyt.reggie.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Orders> implements OrderService {
 
 
@@ -38,6 +40,7 @@ private OrderDetailService orderDetailService;
 @Transactional
     public void submit(Orders orders) {
     Long userId = BaseContext.getCurrentId();
+    
     LambdaQueryWrapper<ShoppingCart> queryWrapper=new LambdaQueryWrapper<>();
     queryWrapper.eq(ShoppingCart::getUserId,userId);
     List<ShoppingCart> list = shoppingCartService.list(queryWrapper);
@@ -47,6 +50,10 @@ private OrderDetailService orderDetailService;
     }
 
     User user = userService.getById(userId);
+    
+    if (user == null) {
+        throw new CustomException("用户不存在，请重新登录");
+    }
 
     Long addressBookId = orders.getAddressBookId();
     AddressBook addressBook = addressBookService.getById(addressBookId);

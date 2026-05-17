@@ -33,7 +33,15 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
 
 
     @Override
+    @Transactional
     public void saveWithDish(SetmealDto setmealDto) {
+        // 检查套餐名称是否已存在
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Setmeal::getName, setmealDto.getName());
+        long count = this.count(queryWrapper);
+        if (count > 0) {
+            throw new CustomException("套餐名称已存在，请使用其他名称");
+        }
 
         super.save(setmealDto);
 

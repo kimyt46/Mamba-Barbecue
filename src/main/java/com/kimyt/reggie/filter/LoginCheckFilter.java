@@ -53,9 +53,18 @@ public class LoginCheckFilter implements Filter {
         }
 
         if(request.getSession().getAttribute("user")!=null){
-            log.info("移动端用户已登录，id为：{}",request.getSession().getAttribute("user"));
-
-            Long userId=(Long) request.getSession().getAttribute("user");
+            Object userObj = request.getSession().getAttribute("user");
+            log.info(">>> 移动端用户Session中的user对象: {}, 类型: {}", userObj, userObj.getClass().getName());
+            
+            Long userId;
+            if(userObj instanceof String) {
+                userId = Long.parseLong((String) userObj);
+                log.info(">>> Session中是String类型，转换为Long: {}", userId);
+            } else {
+                userId = (Long) userObj;
+            }
+            
+            log.info(">>> 移动端用户已登录，userId={}", userId);
             BaseContext.setCurrentId(userId);
             filterChain.doFilter(request,response);
             return;

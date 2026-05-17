@@ -30,7 +30,7 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
         message.setTo(toEmail);
-        message.setSubject("【瑞吉外卖】登录验证码");
+        message.setSubject("【曼巴烧烤】登录验证码");
         message.setText("你的登录验证码是：" + code + "，有效期5分钟。");
         mailSender.send(message);
     }
